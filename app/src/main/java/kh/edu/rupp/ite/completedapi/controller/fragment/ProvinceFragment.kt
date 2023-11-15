@@ -32,10 +32,18 @@ class ProvinceFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        loadProvinceListFromServer();
-    }
+//        Set Up Recyclerview
+        //// create layout manager
+        binding.recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
 
-    private fun loadProvinceListFromServer(){
+        //// create adapter
+        val adapter = ProvinceAdapter();
+        adapter.onProvinceClickListener = { index, province ->
+            Toast.makeText(context, "Province: $index, ${province.name}", Toast.LENGTH_LONG).show();
+        }
+
+        binding.recyclerView.adapter = adapter;
+
 
         //create retrofit client
         val httpClient = Retrofit.Builder()
@@ -56,7 +64,7 @@ class ProvinceFragment: Fragment() {
                 ) {
                     Toast.makeText(context, "Yes", Toast.LENGTH_LONG).show();
                     if(response.isSuccessful){
-                        showProvinceList(response.body());
+                        adapter.submitList(response.body())
                     }else{
                         Toast.makeText(context, "no in Yes", Toast.LENGTH_LONG).show();
                     }
@@ -68,15 +76,20 @@ class ProvinceFragment: Fragment() {
 
             }
         );
+
+//
+//        loadProvinceListFromServer();
+    }
+
+
+
+    private fun loadProvinceListFromServer(){
+
+
     }
 
     private fun showProvinceList(provinceList: List<Province>?){
-        //create layout manager
-        binding.recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-
-        //create adapter
-        val adapter = ProvinceAdapter();
-        adapter.submitList(provinceList);
-        binding.recyclerView.adapter = adapter;
+//        adapter.submitList(provinceList);
+//        binding.recyclerView.adapter = adapter;
     }
 }
