@@ -22,6 +22,8 @@ class ProvinceAdapter(): ListAdapter<Province, ProvinceAdapter.ProvinceViewHolde
     }
 ) {
 
+    var onProvinceClickListener: ((Int, Province) -> Unit)? = null;
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProvinceViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context);
         val binding = ViewHolderProvinceBinding.inflate(layoutInflater, parent, false);
@@ -32,6 +34,10 @@ class ProvinceAdapter(): ListAdapter<Province, ProvinceAdapter.ProvinceViewHolde
     override fun onBindViewHolder(holder: ProvinceViewHolder, position: Int) {
         val item = getItem(position);
         holder.bind(item);
+
+        holder.itemView.setOnClickListener {
+            onProvinceClickListener?.invoke(position, item)
+        }
     }
 
 
